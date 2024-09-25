@@ -40,10 +40,7 @@ export const createAccountAndMintNft = async () => {
   const client = createWalletClient({
     account,
     chain: darechain_testnet,
-    transport: http(process.env.RPC_URL!),
-    //chain: avalancheFuji,
-    //transport: http(),
-    
+    transport: http(process.env.RPC_URL!),    
   });
   const eoa = client.account.address;
   console.log(`EOA address: ${eoa}`);
@@ -73,14 +70,6 @@ export const createAccountAndMintNft = async () => {
     entryPointAddress: process.env.ENTRY_POINT_ADDRESS! as `0x${string}`,
     index: 0, // TODO: change index to create new SA    
   });
-
-  // AVAX_FUJI
-  // const smartAccount = await createSmartAccountClient({    
-  //   signer: client,
-  //   index: 1,
-  //   bundlerUrl,
-  //   paymasterUrl: process.env.PAYMASTER_URL!,
-  // });
 
   console.log('SA address', await smartAccount.getAccountAddress());
   
