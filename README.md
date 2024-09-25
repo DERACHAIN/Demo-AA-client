@@ -2,7 +2,7 @@
 The Demo client project for Darechain Account Abstraction feature, powered by [Biconomy Client SDK](https://docs.biconomy.io/quickstart-react)
 
 ## Prerequisites
-- NodeJS v20 LTS
+- [NodeJS v20 LTS](https://nodejs.org/en/blog/release/v20.9.0)
 
 ## Setup
 - Install npm packages
