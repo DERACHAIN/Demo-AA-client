@@ -1,5 +1,5 @@
 # Demo AA Client
-The Demo client project for Darechain Account Abstraction feature, powered by [Biconomy Client SDK](https://docs.biconomy.io/quickstart-react)
+The Demo client project for Darechain Account Abstraction feature, powered by [DERA AA SDK](https://www.npmjs.com/package/@derachain/aa-sdk)
 
 ## Prerequisites
 - [NodeJS v20 LTS](https://nodejs.org/en/blog/release/v20.9.0)
