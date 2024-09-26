@@ -15,7 +15,8 @@ dotenv.config();
 export const createAccountAndMintNft = async () => {
   // create biconomy smart account instance
   const isPaymaster = true;
-  const smartAccount = await createSmartAccountClient(15, `0x${process.env.PRIVATE_KEY!}`);
+  const index = 0; // change index to create new SA
+  const smartAccount = await createSmartAccountClient(index, `0x${process.env.PRIVATE_KEY!}`);
   console.log('SA address', await smartAccount.getAccountAddress());
   
   // ------ 3. Transfer native token to different address
