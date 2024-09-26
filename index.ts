@@ -8,7 +8,8 @@ dotenv.config();
  
 export const createAccountAndMintNft = async () => {
   // ----- 1. Create smart account from signer (private key)
-  const smartAccount = await createSmartAccountClient(0, `0x${process.env.PRIVATE_KEY!}`, 'testnet');
+  const index = 0; // change index to create new SA
+  const smartAccount = await createSmartAccountClient(index, `0x${process.env.PRIVATE_KEY!}`);
 
   console.log('SA address', await smartAccount.getAccountAddress());
   

@@ -10,11 +10,12 @@ import {
 import { BiconomySmartAccountV2, createSmartAccountClient, Bundler, createECDSAOwnershipValidationModule, PaymasterMode, BiconomyPaymaster,
           ECDSAOwnershipValidationModule, IHybridPaymaster, SponsorUserOperationDto } from "@biconomy/account";
 
+
 import { defineChain } from 'viem';
 
 import dotenv from "dotenv";
 dotenv.config();
- 
+
 export const createAccountAndMintNft = async () => {
   // custom chain definition
   const darechain = defineChain({
@@ -74,12 +75,11 @@ export const createAccountAndMintNft = async () => {
     entryPointAddress: process.env.ENTRY_POINT_ADDRESS! as `0x${string}`,
     defaultValidationModule: ecdsaModule,
     activeValidationModule: ecdsaModule,
-    index: 0, // TODO: change index to create new SA
+    index: 15, // TODO: change index to create new SA
   };
 
   // create biconomy smart account instance
   const smartAccount = await BiconomySmartAccountV2.create(biconomySmartAccountConfig);
-
   console.log('SA address', await smartAccount.getAccountAddress());
   
   // ------ 3. Transfer native token to different address
@@ -97,43 +97,14 @@ export const createAccountAndMintNft = async () => {
       to: nftAddress,
       data: callData,
     };
-  
-    // build partial userOp
-    let partialUserOp = await smartAccount.buildUserOp([transaction]);
-    console.log('partial user op', partialUserOp);
 
-    const biconomyPaymaster = smartAccount.paymaster as IHybridPaymaster<SponsorUserOperationDto>;
+    const userOpResponse = await smartAccount.sendTransaction(transaction, {
+      paymasterServiceData: { 
+        mode: PaymasterMode.SPONSORED,
+        calculateGasLimits: false,
+      },
+    });
 
-    // Here it is meant to act as Sponsorship/Verifying paymaster hence we send mode: PaymasterMode.SPONSORED which is must  
-    let paymasterServiceData: SponsorUserOperationDto = {
-          mode: PaymasterMode.SPONSORED,
-          smartAccountInfo: {
-            name: 'BICONOMY',
-            version: '2.0.0'
-          },
-          // optional params...
-          calculateGasLimits: true,
-      };
-
-    const paymasterAndDataResponse = await biconomyPaymaster.getPaymasterAndData(
-      partialUserOp,                                                                                  
-      paymasterServiceData
-    );
-    partialUserOp.paymasterAndData = paymasterAndDataResponse.paymasterAndData;
-
-    // we should override verificationGasLimit only, left other gas params as it is
-    if (paymasterAndDataResponse.verificationGasLimit) {
-
-      // Returned gas limits must be replaced in your op as you update paymasterAndData.
-      // Because these are the limits paymaster service signed on to generate paymasterAndData
-      // If you receive AA34 error check here..
-
-      partialUserOp.verificationGasLimit = paymasterAndDataResponse.verificationGasLimit;
-    }
-
-    console.log(`userOp: ${JSON.stringify(partialUserOp, null, "\t")}`);
-
-    const userOpResponse = await smartAccount.sendUserOp(partialUserOp);
     console.log(`userOp Hash: ${userOpResponse.userOpHash}`);
 
     const {transactionHash} = await userOpResponse.waitForTxHash();
