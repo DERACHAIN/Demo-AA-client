@@ -14,7 +14,7 @@ import { BiconomySmartAccountV2, createSmartAccountClient, Bundler, createECDSAO
 import { defineChain } from 'viem';
 
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: '../.env' });
 
 export const createAccountAndMintNft = async () => {
   // custom chain definition

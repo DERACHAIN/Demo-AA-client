@@ -11,8 +11,9 @@ import { defineChain } from 'viem';
 
 import dotenv from "dotenv";
 import { parse } from "path";
-dotenv.config();
- 
+dotenv.config({ path: '../.env' });
+
+
 const darechain_testnet = defineChain({
   id: parseInt(process.env.CHAIN_ID!),
   name: 'DERACHAIN (Testnet)',
@@ -35,6 +36,8 @@ const darechain_testnet = defineChain({
 const bundlerUrl = process.env.BUNDLER_URL!;
  
 export const createAccountAndMintNft = async () => {
+  //console.log("RPC_URL", process.env.RPC_URL);
+  
   // ----- 1. Generate EOA from private key
   const account = privateKeyToAccount(`0x${process.env.PRIVATE_KEY!}`);
   const client = createWalletClient({
